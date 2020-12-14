@@ -174,7 +174,7 @@ public struct Entry: Equatable {
         size += self.dataDescriptor != nil ? DataDescriptor.size : 0
         return size
     }
-    var dataOffset: Int {
+    public var dataOffset: Int {
         var dataOffset = Int(self.centralDirectoryStructure.relativeOffsetOfLocalHeader)
         dataOffset += LocalFileHeader.size
         dataOffset += Int(self.localFileHeader.fileNameLength)
@@ -184,7 +184,9 @@ public struct Entry: Equatable {
     let centralDirectoryStructure: CentralDirectoryStructure
     let localFileHeader: LocalFileHeader
     let dataDescriptor: DataDescriptor?
-
+	public var compressionMethod: UInt16 {
+		return centralDirectoryStructure.compressionMethod
+	} 
     public static func == (lhs: Entry, rhs: Entry) -> Bool {
         return lhs.path == rhs.path
             && lhs.localFileHeader.crc32 == rhs.localFileHeader.crc32
