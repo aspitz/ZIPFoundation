@@ -109,6 +109,7 @@ public struct Entry: Equatable {
             // even if the version needed to extract is lower than 4.5
             return UInt8(truncatingIfNeeded: self.versionNeededToExtract) >= 45 || zip64ExtendedInformation != nil
         }
+        var isText: Bool { return (self.internalFileAttributes & (1 << 0)) == 1 }
     }
     /// Returns the `path` of the receiver within a ZIP `Archive` using a given encoding.
     ///
@@ -184,6 +185,11 @@ public struct Entry: Equatable {
         }
         return UInt64(dataDescriptor?.uncompressedSize ?? centralDirectoryStructure.uncompressedSize)
     }
+
+    public var isText: Bool {
+        return centralDirectoryStructure.isText
+    }
+    
     /// The combined size of the local header, the data and the optional data descriptor.
     var localSize: UInt64 {
         let localFileHeader = self.localFileHeader
